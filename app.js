@@ -4,12 +4,12 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 
-var bodyParser = require("body-parser")
+
 const session = require("express-session");
 
 var hbs = require("express-handlebars");
 
-const connectDatabase = require('./model/database')
+const connectDatabase = require('./config/database')
 
 var userRouter = require('./routes/user');
 var adminRouter = require('./routes/admin');
@@ -28,7 +28,7 @@ app.engine('hbs',hbs.engine({extname:'hbs',defaultLayout:'user-layout',layoutsDi
 app.use(logger('dev'));
 
 // initialize body-parser to parse incoming parameters requests to req.body
-//app.use(bodyParser.urlencoded({ extended: true }));
+// app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));

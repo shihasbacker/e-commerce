@@ -4,16 +4,17 @@ var router = express.Router();
 
 
 // routes details file
-const userRoutes = require('../controller/user-controller')
+const userRoutes = require('../controller/userController')
+const sessionCheck = require('../middlewares/session')
 
 
 
 
-router.get('/',userRoutes.sessionChecker,userRoutes.indexRoute);
+router.get('/',sessionCheck.userSessionChecker,userRoutes.indexRoute);
 router.get('/signup',userRoutes.getSignup);
 router.get('/login',userRoutes.getLogin);
-router.post('/register-user',userRoutes.SignupAction);
-router.post('/login-submit',userRoutes.LoginAction)
+router.post('/registerUser',userRoutes.SignupAction);
+router.post('/loginSubmit',userRoutes.LoginAction)
 router.get('/logout',userRoutes.getLogout)
 
 

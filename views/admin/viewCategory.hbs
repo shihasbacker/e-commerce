@@ -154,14 +154,14 @@
                 <div class="row g-4">
                     <div class="col-12">
                         <div class="bg-secondary rounded h-100 p-4">
-                            <h6 class="mb-4">Responsive Table</h6>
+                            <h6 class="mb-4">Category Table</h6>
                             <div class="table-responsive">
                                 <table class="table">
                                     <thead>
                                         <tr>
                                             <th scope="col">#</th>
                                             <th scope="col">Category</th>
-                                            <th scope="col">Sub-Category</th>
+                                            
                                             <th scope="col">Edit-Category</th>
                                             <th scope="col">Delete-Category</th>
                                             {{!-- <th scope="col">Block/Unblock User</th>
@@ -174,7 +174,7 @@
                                         <tr>
                                             <th scope="row">{{@index}}</th>
                                             <td>{{this.category}}</td>
-                                            <td>{{this.subCategory}}</td>
+                                            {{!-- <td>{{this.subCategory}}</td> --}}
                                             <td><a href="/admin/editCategory/{{this._id}}"><i class="bi bi-pencil-square"></i></a></td>
                                             <td><a href="/admin/deleteCategory/{{this._id}}"><i class="bi bi-trash"></i></a></td>
                                             {{!-- <td><a href="/admin/edit/{{this._id}}"><i class="bi bi-pencil-square"></i></a></td>

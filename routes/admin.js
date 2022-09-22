@@ -1,16 +1,28 @@
 var express = require('express');
 var router = express.Router();
-
+const multer = require('multer')
 
 
 // routes details file
-const adminRoutes = require('../controller/admin-controller');
-const adminModel = require('../model/adminSchema');
+const adminRoutes = require('../controller/adminController');
+const sessionCheck = require('../middlewares/session')
 
+
+//multer//
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, './public/productImageUploads');
+    },
+    filename: function (req, file, cb) {
+        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+        cb(null,uniqueSuffix + '-' +file.originalname   )
+    }
+});
+const upload = multer({ storage: storage });
 
 
 //index//
-router.get('/',adminRoutes.sessionChecker,adminRoutes.adminIndexRoute);
+router.get('/',sessionCheck.adminSessionChecker,adminRoutes.adminIndexRoute);
 
 //signup//
 router.get('/signup',adminRoutes.adminSignup);
@@ -21,22 +33,22 @@ router.get('/logout',adminRoutes.adminLogout)
 
 //user//
 router.get('/userTable',adminRoutes.userDetails)
-router.get('/edit/:id',adminRoutes.sessionChecker,adminRoutes.editBlock)
-router.get('/block/:id',adminRoutes.sessionChecker,adminRoutes.userBlock)
-router.get('/active/:id',adminRoutes.sessionChecker,adminRoutes.userActive)
+router.get('/edit/:id',sessionCheck.adminSessionChecker,adminRoutes.editBlock)
+router.get('/block/:id',sessionCheck.adminSessionChecker,adminRoutes.userBlock)
+router.get('/active/:id',sessionCheck.adminSessionChecker,adminRoutes.userActive)
 
 //category//
-router.get('/viewCategory',adminRoutes.sessionChecker,adminRoutes.viewCategory)
-router.get('/addCategory',adminRoutes.sessionChecker,adminRoutes.addCategory)
-router.post('/createCategory',adminRoutes.sessionChecker,adminRoutes.createCategory)
-router.get('/editCategory/:id',adminRoutes.sessionChecker,adminRoutes.editCategory)
-router.post('/editCategory/:id',adminRoutes.sessionChecker,adminRoutes.editCategoryButton)
-router.get('/deleteCategory/:id',adminRoutes.sessionChecker, adminRoutes.deleteCategory);
+router.get('/viewCategory',sessionCheck.adminSessionChecker,adminRoutes.viewCategory)
+router.get('/addCategory',sessionCheck.adminSessionChecker,adminRoutes.addCategory)
+router.post('/createCategory',sessionCheck.adminSessionChecker,adminRoutes.createCategory)
+router.get('/editCategory/:id',sessionCheck.adminSessionChecker,adminRoutes.editCategory)
+router.post('/editCategory/:id',sessionCheck.adminSessionChecker,adminRoutes.editCategoryButton)
+router.get('/deleteCategory/:id',sessionCheck.adminSessionChecker, adminRoutes.deleteCategory);
 
 //product//
 router.get('/viewProducts',adminRoutes.productDetails)
 router.get('/addProduct',adminRoutes.addProduct)
-router.post('/addProduct',adminRoutes.createProduct)
+router.post('/addProduct',upload.array('photos', 4),adminRoutes.createProduct)
 
 
 

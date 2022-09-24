@@ -1,7 +1,7 @@
 <div class="container-fluid position-relative d-flex p-0">
         <!-- Spinner Start -->
         <div id="spinner" class="show bg-dark position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
-            <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;">
+            <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" >
                 <span class="sr-only">Loading...</span>
             </div>
         </div>
@@ -11,12 +11,12 @@
         <!-- Sidebar Start -->
         <div class="sidebar pe-4 pb-3">
             <nav class="navbar bg-secondary navbar-dark">
-                <a href="index.html" class="navbar-brand mx-4 mb-3">
+                <a href="/admindashboard.html" class="navbar-brand mx-4 mb-3">
                     <h3 class="text-primary"><i class="fa fa-user-edit me-2"></i>DarkPan</h3>
                 </a>
                 <div class="d-flex align-items-center ms-4 mb-4">
                     <div class="position-relative">
-                        <img class="rounded-circle" src="img/user.jpg" alt="" style="width: 40px; height: 40px;">
+                        <img class="rounded-circle" src="/adminassets/img/user.jpg" alt="" style="width: 40px; height: 40px;">
                         <div class="bg-success rounded-circle border border-2 border-white position-absolute end-0 bottom-0 p-1"></div>
                     </div>
                     <div class="ms-3">
@@ -25,27 +25,24 @@
                     </div>
                 </div>
                 <div class="navbar-nav w-100">
-                    <a href="index.html" class="nav-item nav-link"><i class="fa fa-tachometer-alt me-2"></i>Dashboard</a>
+                    <a href="" class="nav-item nav-link active"><i class="fa fa-tachometer-alt me-2"></i>Dashboard</a>
                     <div class="nav-item dropdown">
-                        <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"><i class="fa fa-laptop me-2"></i>Elements</a>
+                        <a href="" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"><i class="fa fa-laptop me-2"></i>Category</a>
                         <div class="dropdown-menu bg-transparent border-0">
-                            <a href="button.html" class="dropdown-item">Buttons</a>
-                            <a href="typography.html" class="dropdown-item">Typography</a>
-                            <a href="element.html" class="dropdown-item">Other Elements</a>
+                            <a href="/admin/categorytable" class="dropdown-item">View Categories</a>
+                            <a href="/admin/addcategories" class="dropdown-item">Add Categories</a>
+                            {{!-- <a href="element.html" class="dropdown-item">Other Elements</a> --}}
+                        </div>
+                    </div><a href="/admin/table" class="nav-item nav-link "><i class="fa fa-th me-2"></i>Users</a>
+                       <a href="" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"><i class="fa fa-laptop me-2"></i>Products</a>
+                        <div class="dropdown-menu bg-transparent border-0">
+                            <a href="/admin/producttable" class="dropdown-item">View Products</a>
+                            <a href="/admin/addproduct" class="dropdown-item">Add Products</a>
+                            {{!-- <a href="element.html" class="dropdown-item">Other Elements</a> --}}
                         </div>
                     </div>
-                    <a href="widget.html" class="nav-item nav-link"><i class="fa fa-th me-2"></i>Widgets</a>
-                    <a href="form.html" class="nav-item nav-link active"><i class="fa fa-keyboard me-2"></i>Forms</a>
-                    <a href="table.html" class="nav-item nav-link"><i class="fa fa-table me-2"></i>Tables</a>
-                    <a href="chart.html" class="nav-item nav-link"><i class="fa fa-chart-bar me-2"></i>Charts</a>
-                    <div class="nav-item dropdown">
-                        <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"><i class="far fa-file-alt me-2"></i>Pages</a>
-                        <div class="dropdown-menu bg-transparent border-0">
-                            <a href="signin.html" class="dropdown-item">Sign In</a>
-                            <a href="signup.html" class="dropdown-item">Sign Up</a>
-                            <a href="404.html" class="dropdown-item">404 Error</a>
-                            <a href="blank.html" class="dropdown-item">Blank Page</a>
-                        </div>
+                    
+                    
                     </div>
                 </div>
             </nav>
@@ -57,7 +54,7 @@
         <div class="content">
             <!-- Navbar Start -->
             <nav class="navbar navbar-expand bg-secondary navbar-dark sticky-top px-4 py-0">
-                <a href="index.html" class="navbar-brand d-flex d-lg-none me-4">
+                <a href="admindashboard" class="navbar-brand d-flex d-lg-none me-4">
                     <h2 class="text-primary mb-0"><i class="fa fa-user-edit"></i></h2>
                 </a>
                 <a href="#" class="sidebar-toggler flex-shrink-0">
@@ -151,22 +148,26 @@
                 <div class="row g-4">
                     <div class="col-sm-12 col-xl-6">
                         <div class="bg-secondary rounded h-100 p-4">
-                            <h6 class="mb-4">Add Product</h6>
-                            <form method="post" action="/admin/addProduct" enctype="multipart/form-data">
+                            <h6 class="mb-4">Edit Product</h6>
+                        
+                            <form method="post" action="/admin/editProduct/{{productData._id}}" enctype="multipart/form-data">
                                 <div class="mb-3">
+                                    
                                     <label  class="form-label">Product Name</label>
-                                    <input name="name" type="text" class="form-control" id="exampleInputEmail1"
+                                    <input name="name" type="text" class="form-control" id="exampleInputEmail1" value="{{productData.name}}"
                                         aria-describedby="emailHelp">
                                     {{!-- <div id="emailHelp" class="form-text">We'll never share your email with anyone else.
                                     </div> --}}
                                 </div>
-                                <div class="mb-3">
-                                    <label  class="form-label">Brand name</label>
-                                    <input name="brandName" type="text" class="form-control" id="exampleInputEmail1"
+                                 <div class="mb-3">
+                                    
+                                    <label  class="form-label">Brand Name</label>
+                                    <input name="brandName" type="text" class="form-control" id="exampleInputEmail1" value="{{productData.brandName}}"
                                         aria-describedby="emailHelp">
                                     {{!-- <div id="emailHelp" class="form-text">We'll never share your email with anyone else.
                                     </div> --}}
                                 </div>
+                            
                                 <div class="mb-3">
                                 <label  class="form-label">Product Category</label>
                                     
@@ -183,42 +184,43 @@
                                 <div class="mb-3">
                                     <label  class="form-label">Product Description</label>
                                     <input name="description" type="text" class="form-control" id="exampleInputEmail1"
-                                        aria-describedby="emailHelp">
+                                        aria-describedby="emailHelp" value="{{productData.description}}">
                                     {{!-- <div id="emailHelp" class="form-text">We'll never share your email with anyone else.
                                     </div> --}}
                                 </div>
                                 <div class="mb-3">
                                     <label  class="form-label">Product Quantity</label>
                                     <input name="stock" type="number" min="0" class="form-control" id="exampleInputEmail1"
-                                        aria-describedby="emailHelp">
+                                        aria-describedby="emailHelp"  value="{{productData.stock}}">
                                     {{!-- <div id="emailHelp" class="form-text">We'll never share your email with anyone else.
                                     </div> --}}
                                 </div>
                                  <div class="mb-3">
                                     <label  class="form-label">Product Amount</label>
                                     <input name="amount" type="text" class="form-control" id="exampleInputEmail1"
-                                        aria-describedby="emailHelp">
+                                        aria-describedby="emailHelp" value="{{productData.amount}}" >
                                     {{!-- <div id="emailHelp" class="form-text">We'll never share your email with anyone else.
                                     </div> --}}
                                 </div>
                                  <div class="mb-3">
                                     <label  class="form-label">Discount</label>
                                     <input name="discount" type="text" class="form-control" id="exampleInputEmail1"
-                                        aria-describedby="emailHelp">
+                                        aria-describedby="emailHelp" value="{{productData.discount}}">
                                     {{!-- <div id="emailHelp" class="form-text">We'll never share your email with anyone else.
                                     </div> --}}
                                 </div>
                                    <div class="mb-3">
                                 <label for="formFileMultiple" class="form-label">Product Images</label>
                                 <input name="photos" class="form-control bg-dark" type="file" id="formFileMultiple" multiple>
-                            </div>
-                            
+                             </div>
+                               
                                 {{!-- <div class="mb-3 form-check">
                                     <input type="checkbox" class="form-check-input" id="exampleCheck1">
                                     <label class="form-check-label" for="exampleCheck1">Check me out</label>
                                 </div> --}}
-                                <button type="submit" class="btn btn-primary">Create</button>
+                              <button type="submit" class="btn btn-primary">Edit</button>
                             </form>
+                             
                         </div>
                     </div>
                     

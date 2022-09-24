@@ -49,7 +49,9 @@ router.get('/deleteCategory/:id',sessionCheck.adminSessionChecker, adminRoutes.d
 router.get('/viewProducts',adminRoutes.productDetails)
 router.get('/addProduct',adminRoutes.addProduct)
 router.post('/addProduct',upload.array('photos', 4),adminRoutes.createProduct)
-
+router.get('/viewEditProduct/:id',adminRoutes.viewEditProduct)
+router.post('/editProduct/:id',upload.array('photos', 4),adminRoutes.editProduct)
+router.get('/deleteProduct/:id',adminRoutes.deleteProduct)
 
 
 module.exports = router;

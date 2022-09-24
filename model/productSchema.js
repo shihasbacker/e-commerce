@@ -4,13 +4,16 @@ const productSchema = new mongoose.Schema({
     name: {
        type:String
     },
+    brandName: {
+        type:String
+    },
     category: {
         type:String
     },
     description: {
         type:String
     },
-    quantity: {
+    stock: {
         type:Number
     },
     amount: {

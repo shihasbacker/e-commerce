@@ -6,6 +6,7 @@ var router = express.Router();
 // routes details file
 const userRoutes = require('../controller/userController')
 const sessionCheck = require('../middlewares/session')
+const cartRoutes = require('../controller/cartController')
 
 
 
@@ -17,8 +18,13 @@ router.post('/registerUser',userRoutes.SignupAction);
 router.post('/loginSubmit',userRoutes.LoginAction)
 router.get('/logout',userRoutes.getLogout)
 
+//product-view-page//
+router.get('/quickView/:id',userRoutes.quickView)
+//cart//
+router.get('/viewCart/:id',sessionCheck.userSessionChecker,cartRoutes.viewCart)
 
-
+//sample//
+// router.get('/sample',userRoutes.sample)
 
 module.exports = router;
 

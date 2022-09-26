@@ -1,10 +1,14 @@
 const userModel = require("../model/userSchema");
-const bcrypt = require('bcrypt')
+const productModel = require("../model/productSchema")
+const categoryModel = require("../model/categorySchema")
+const bcrypt = require('bcrypt');
+const { router } = require("../app");
 
 
-
-exports.indexRoute = function(req,res,next){
-    res.render('user/index');
+exports.indexRoute = async function(req,res,next){
+    let products = await productModel.find().populate('category').lean();
+   
+    res.render('user/index',{products});
 }
 
 //signup page
@@ -29,11 +33,12 @@ exports.SignupAction= async function(req,res){
 exports.getLogin = function(req,res,next){
     if(req.session.userLogin){
         res.redirect('/')
-    }else res.render('user/user-login');
+    }else res.render('user/userLogin');
 }
 
 exports.LoginAction=async function(req,res){
     let userData = await userModel.findOne({email:req.body.email})
+       
     if(userData) {
         if(userData.block==true) res.send("you are blocked by admin")
 
@@ -42,6 +47,8 @@ exports.LoginAction=async function(req,res){
         // console.log(correct)
         if(correct==true){
             req.session.userLogin = true;
+            req.session.userId = userData._id
+            console.log(req.session) 
             return res.redirect('/')
         } 
         else res.send("password incorrect")
@@ -56,6 +63,16 @@ exports.getLogout=function(req,res){
     res.redirect('/login')
 }
 
+exports.quickView=async(req,res)=>{
+  productId = req.params.id
+  let productDetails = await productModel.findOne({_id:productId}).lean()
+  res.render('user/productDetail',{productDetails})
+}
+
+
+// exports.sample=(req,res)=>{
+//     res.render('user/product-detail')
+// }
 
 
 

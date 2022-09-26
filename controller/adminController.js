@@ -147,7 +147,7 @@ exports.deleteCategory = async function (req, res, next) {
 
 //PRODUCT
 exports.productDetails = async (req, res) => {
-  let productData = await productModel.find().lean();
+  let productData = await productModel.find().populate('category').lean();
   res.render("admin/viewProducts", { productData, layout: "admin-layout" });
 };
 exports.addProduct = async function (req, res) {

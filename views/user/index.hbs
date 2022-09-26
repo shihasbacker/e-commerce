@@ -533,41 +533,15 @@
             >
               All Products
             </button>
-
+            {{#each products}}
             <button
               class="stext-106 cl6 hov1 bor3 trans-04 m-r-32 m-tb-5"
-              data-filter=".women"
+              data-filter=".{{this.category.category}}"
             >
-              Women
+              {{this.category.category}}
             </button>
-
-            <button
-              class="stext-106 cl6 hov1 bor3 trans-04 m-r-32 m-tb-5"
-              data-filter=".men"
-            >
-              Men
-            </button>
-
-            <button
-              class="stext-106 cl6 hov1 bor3 trans-04 m-r-32 m-tb-5"
-              data-filter=".bag"
-            >
-              Bag
-            </button>
-
-            <button
-              class="stext-106 cl6 hov1 bor3 trans-04 m-r-32 m-tb-5"
-              data-filter=".shoes"
-            >
-              Shoes
-            </button>
-
-            <button
-              class="stext-106 cl6 hov1 bor3 trans-04 m-r-32 m-tb-5"
-              data-filter=".watches"
-            >
-              Watches
-            </button>
+            {{/each}}
+            
           </div>
 
           <div class="flex-w flex-c-m m-tb-10">
@@ -819,15 +793,16 @@
         </div>
 
         <div class="row isotope-grid">
-          <div class="col-sm-6 col-md-4 col-lg-3 p-b-35 isotope-item women">
+          {{#each products}}
+          <div class="col-sm-6 col-md-4 col-lg-3 p-b-35 isotope-item {{this.category.category}}">
             <!-- Block2 -->
             <div class="block2">
               <div class="block2-pic hov-img0">
-                <img src="images/product-01.jpg" alt="IMG-PRODUCT" />
+                <img src="/productImageUploads/{{this.imagepath.[0]}}" alt="IMG-PRODUCT" />
 
                 <a
-                  href="#"
-                  class="block2-btn flex-c-m stext-103 cl2 size-102 bg0 bor2 hov-btn1 p-lr-15 trans-04 js-show-modal1"
+                  href="/quickView/{{this._id}}"
+                  class="block2-btn flex-c-m stext-103 cl2 size-102 bg0 bor2 hov-btn1 p-lr-15 trans-04 "
                 >
                   Quick View
                 </a>
@@ -839,10 +814,10 @@
                     href="product-detail.html"
                     class="stext-104 cl4 hov-cl1 trans-04 js-name-b2 p-b-6"
                   >
-                    Esprit Ruffle Shirt
+                    {{this.name}}
                   </a>
 
-                  <span class="stext-105 cl3"> $16.64 </span>
+                  <span class="stext-105 cl3"> ₹{{this.amount}} </span>
                 </div>
 
                 <div class="block2-txt-child2 flex-r p-t-3">
@@ -865,8 +840,9 @@
               </div>
             </div>
           </div>
+          {{/each}}
 
-          <div class="col-sm-6 col-md-4 col-lg-3 p-b-35 isotope-item women">
+          {{!-- <div class="col-sm-6 col-md-4 col-lg-3 p-b-35 isotope-item women">
             <!-- Block2 -->
             <div class="block2">
               <div class="block2-pic hov-img0">
@@ -911,9 +887,9 @@
                 </div>
               </div>
             </div>
-          </div>
+          </div> --}}
 
-          <div class="col-sm-6 col-md-4 col-lg-3 p-b-35 isotope-item men">
+          {{!-- <div class="col-sm-6 col-md-4 col-lg-3 p-b-35 isotope-item men">
             <!-- Block2 -->
             <div class="block2">
               <div class="block2-pic hov-img0">
@@ -958,9 +934,9 @@
                 </div>
               </div>
             </div>
-          </div>
+          </div> --}}
 
-          <div class="col-sm-6 col-md-4 col-lg-3 p-b-35 isotope-item women">
+          {{!-- <div class="col-sm-6 col-md-4 col-lg-3 p-b-35 isotope-item women">
             <!-- Block2 -->
             <div class="block2">
               <div class="block2-pic hov-img0">
@@ -1522,9 +1498,9 @@
                 </div>
               </div>
             </div>
-          </div>
+          </div> --}}
 
-          <div class="col-sm-6 col-md-4 col-lg-3 p-b-35 isotope-item women">
+          {{!-- <div class="col-sm-6 col-md-4 col-lg-3 p-b-35 isotope-item women">
             <!-- Block2 -->
             <div class="block2">
               <div class="block2-pic hov-img0">
@@ -1569,7 +1545,7 @@
                 </div>
               </div>
             </div>
-          </div>
+          </div> --}}
         </div>
 
         <!-- Load more -->

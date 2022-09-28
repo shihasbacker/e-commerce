@@ -20,10 +20,19 @@ var app = express();
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'hbs');
 
-app.engine('hbs',hbs.engine({extname:'hbs',defaultLayout:'user-layout',layoutsDir:__dirname+'/views/layout/',partialsDir  : [
+app.engine('hbs',hbs.engine({extname:'hbs',defaultLayout:'user-layout',layoutsDir:__dirname+'/views/layout/',partialsDir  : 
   //  path to your partials
-  path.join(__dirname, 'views/partials'),
-]}))
+  path.join(__dirname, 'views/partials'), helpers: {
+    inc1: function (context) {
+      return context+1
+    },
+    total: function (amount, discount, quantity) {
+      return (amount - discount) * quantity;
+    },
+    singleTotal: function (amount, discount) {
+      return (amount - discount);
+    }
+} }));
 
 app.use(logger('dev'));
 
@@ -48,10 +57,7 @@ app.use(
   })
 );
 
-// app.use((req, res, next) => {
-//   res.set("Cache-Control", "no-store");
-//   next();
-// });
+
 
 app.use(function(req, res, next) {
   res.set('Cache-Control', 'no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0');

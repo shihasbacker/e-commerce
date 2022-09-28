@@ -277,7 +277,7 @@
 					</div>
 
 					<div class="header-cart-buttons flex-w w-full">
-						<a href="shoping-cart.html" class="flex-c-m stext-101 cl0 size-107 bg3 bor2 hov-btn3 p-lr-15 trans-04 m-r-8 m-b-10">
+						<a href="#" class="flex-c-m stext-101 cl0 size-107 bg3 bor2 hov-btn3 p-lr-15 trans-04 m-r-8 m-b-10">
 							View Cart
 						</a>
 
@@ -320,6 +320,7 @@
 									<th class="column-3">Price</th>
 									<th class="column-4">Quantity</th>
 									<th class="column-5">Total</th>
+									<th class="column-6">Delete</th>
 								</tr>
 								{{#each cartData.products}}
 								<tr class="table_row">
@@ -329,24 +330,28 @@
 										</div>
 									</td>
 									<td class="column-2">{{this.productId.name}}</td>
-									<td class="column-3">$ {{this.productId.amount}}</td>
+									<td class="column-3">₹ {{this.productId.amount}}</td>
 									<td class="column-4">
-										<div class="wrap-num-product flex-w m-l-auto m-r-0">
-											<div class="btn-num-product-down cl8 hov-btn3 trans-04 flex-c-m">
+										<div class="wrap-num-product mr-3">
+											{{!-- <div class="btn-num-product-down cl8 hov-btn3 trans-04 flex-c-m">
 												<i class="fs-16 zmdi zmdi-minus"></i>
-											</div>
+											</div> --}}
 
-											<input class="mtext-104 cl3 txt-center num-product" type="number" name="num-product1" value="{{this.quantity}}">
+											<input min="1" max="100" class="mtext-104 cl3 txt-center w-100 num-product" id="{{this.productId._id}}"   onclick="changeQuantity('{{this.productId._id}}','{{@index}}')" type="number" name="num-product1" value="{{this.quantity}}">
 
-											<div class="btn-num-product-up cl8 hov-btn3 trans-04 flex-c-m">
-												<i class="fs-16 zmdi zmdi-plus"></i>
-											</div>
-										</div>
+											{{!-- <div class="btn-num-product-up cl8 hov-btn3 trans-04 flex-c-m" >
+												<i class="fs-16 zmdi zmdi-plus" ></i>
+											</div> --}}
+										</div> 
 									</td>
-									
-									<td class="column-5">$ 36.00</td>
+									{{!-- <td class="product_quantity"><label></label> <input min="1"
+                                                    max="100" value="{{this.quantity}}" type="number" id="{{this.productId._id}}" onclick="changeQuantity('{{this.productId._id}}','{{@index}}');" ></td>
+									 --}}
+									<td class="product_total" id="{{this.productId._id}}price">&#8377;{{total this.productId.amount this.productId.discount this.quantity}}
+									<td><button type="button" onclick="removeProduct('{{this.productId._id}}','{{@index}}')" class="btn btn-danger">Delete</button></td>
 								</tr>
 								{{/each}}
+								
 								{{!-- <tr class="table_row">
 									<td class="column-1">
 										<div class="how-itemcart1">
@@ -401,10 +406,10 @@
 									Subtotal:
 								</span>
 							</div>
-
-							<div class="size-209">
+							{{!-- <td class="product_total" id="totalAmount">₹ {{totalAmount}}</td> --}}
+							<div class="product_total" id="totalAmount">
 								<span class="mtext-110 cl2">
-									$79.65
+									{{totalAmount}}
 								</span>
 							</div>
 						</div>
@@ -670,5 +675,85 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
 	</script>
 <!--===============================================================================================-->
 	<script src="js/main.js"></script>
+	<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+
+	<script>
+
+
+	  function changeQuantity(proId,index) {
+    console.log('hihiiih');
+  count= parseInt(document.getElementById(proId).value)
+  
+   $.ajax({
+    url: '/incrementValue',
+    data: {
+      
+      product: proId,           
+      quantity: count,
+      index:index
+
+    },
+     method: 'post',
+    success: (response) => {
+        console.log(response)
+      
+         
+        document.getElementById(proId).value = response.quantity;
+        log=proId+'price'
+        console.log('hi')
+        console.log(log);
+        console.log(response)
+        $('#'+proId+'price').text(response.price);
+
+        $('#totalAmount').text(response.totalAmount);
+      
+
+    },
+    error: (error) => {
+        alert('hierror')
+        console.log(error)
+    },
+  })
+}
+	
+  
+    function removeProduct(proId, index) {
+		
+
+		 axios.post('/removeProduct',  {
+                product: proId,
+                index: index,
+            })
+      .then(function (response) {
+		console.log(response)
+		location.reload()
+		
+        Swal.fire({
+         title: 'sucess',
+         text: response.data.message,
+          footer: '<a href="">Why do I have this issue?</a>'
+        })
+
+      }
+	  )
+      .catch(function (error) {
+        Swal.fire({
+          title: 'failure',
+          text: error.data.message,
+          footer: '<a href="">Why do I have this issue?</a>'
+        })
+
+
+      });
+	}
+
+
+
+
+
+</script>
 
 </body>
+
+

@@ -54,6 +54,7 @@ router.post('/editProduct/:id',upload.array('photos', 4),adminRoutes.editProduct
 router.get('/deleteProduct/:id',adminRoutes.deleteProduct)
 
 
+// router.get('*',adminRoutes.getErrorPage)
 module.exports = router;
 
 

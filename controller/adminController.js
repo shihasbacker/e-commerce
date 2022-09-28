@@ -214,8 +214,6 @@ exports.deleteProduct=async(req,res)=>{
 }
 
 
-
-
 // module.exports = {
 //     editCategoryButton: async (req,res)=>{
 //         console.log("prrrr")

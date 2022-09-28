@@ -5,6 +5,7 @@ const bcrypt = require('bcrypt');
 const { router } = require("../app");
 
 
+
 exports.indexRoute = async function(req,res,next){
     let products = await productModel.find().populate('category').lean();
    
@@ -68,6 +69,7 @@ exports.quickView=async(req,res)=>{
   let productDetails = await productModel.findOne({_id:productId}).lean()
   res.render('user/productDetail',{productDetails})
 }
+
 
 
 // exports.sample=(req,res)=>{

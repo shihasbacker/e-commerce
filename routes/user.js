@@ -6,9 +6,9 @@ var router = express.Router();
 // routes details file
 const userRoutes = require('../controller/userController')
 const sessionCheck = require('../middlewares/session')
-const cartRoutes = require('../controller/cartController')
-
-
+const cartRoutes = require('../controller/cartController');
+const cartController = require('../controller/cartController');
+const wishlistRoutes =  require('../controller/wishlistController')
 
 
 router.get('/',sessionCheck.userSessionChecker,userRoutes.indexRoute);
@@ -19,12 +19,24 @@ router.post('/loginSubmit',userRoutes.LoginAction)
 router.get('/logout',userRoutes.getLogout)
 
 //product-view-page//
-router.get('/quickView/:id',userRoutes.quickView)
+router.get('/quickView/:id',sessionCheck.userSessionChecker,userRoutes.quickView)
 //cart//
-router.get('/viewCart/:id',sessionCheck.userSessionChecker,cartRoutes.viewCart)
 
-//sample//
-// router.get('/sample',userRoutes.sample)
+router.get('/addToCart/:id',sessionCheck.userSessionChecker,cartRoutes.addToCart)
+router.get('/viewCart',sessionCheck.userSessionChecker,cartRoutes.viewCart)
+
+router.post('/incrementValue',cartRoutes.incrementValue)
+router.post('/removeProduct',cartRoutes.removeProduct)
+
+
+//wishlist//
+router.get('/wishlist',wishlistRoutes.wishlist)
+router.post('/addWishlist',wishlistRoutes.addWishlist)
+
+
+
+//errorpage//
+// router.get('*',userRoutes.getErrorPage)
 
 module.exports = router;
 

@@ -27,6 +27,7 @@ exports.SignupAction= async function(req,res){
     let newUser = await userModel.create(req.body)
     console.log(newUser)
     req.session.userLogin = true;
+    req.session.userId = newUser._id
     res.redirect("/")
 }
 
@@ -39,6 +40,7 @@ exports.getLogin = function(req,res,next){
 
 exports.LoginAction=async function(req,res){
     let userData = await userModel.findOne({email:req.body.email})
+
        
     if(userData) {
         if(userData.block==true) res.send("you are blocked by admin")
@@ -61,6 +63,7 @@ exports.LoginAction=async function(req,res){
 }
 exports.getLogout=function(req,res){
     req.session.userLogin=false;
+    
     res.redirect('/login')
 }
 

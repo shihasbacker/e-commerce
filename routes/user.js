@@ -9,6 +9,7 @@ const sessionCheck = require('../middlewares/session')
 const cartRoutes = require('../controller/cartController');
 const cartController = require('../controller/cartController');
 const wishlistRoutes =  require('../controller/wishlistController')
+const userProfile = require('../controller/userProfileController')
 
 
 router.get('/',sessionCheck.userSessionChecker,userRoutes.indexRoute);
@@ -30,11 +31,18 @@ router.post('/removeProduct',cartRoutes.removeProduct)
 
 
 //wishlist//
-router.get('/wishlist',wishlistRoutes.wishlist)
-router.post('/addWishlist',wishlistRoutes.addWishlist)
+router.get('/wishlist',sessionCheck.userSessionChecker,wishlistRoutes.wishlist)
+router.post('/addWishlist',sessionCheck.userSessionChecker,wishlistRoutes.addWishlist)
+router.post('/deleteWishlist',sessionCheck.userSessionChecker,wishlistRoutes.delete)
 
 
-
+router.get('/userDetails',sessionCheck.userSessionChecker,userProfile.userProfile)
+router.patch('/changeUsername',sessionCheck.userSessionChecker,userProfile.changeUsername)
+router.patch('/changePassword',sessionCheck.userSessionChecker,userProfile.changePassword)
+router.get('/addAddress',sessionCheck.userSessionChecker,userProfile.addAddress)
+router.post('/submitAddress',sessionCheck.userSessionChecker,userProfile.submitAddress)
+router.post('/deleteAddress',userProfile.deleteAddress)
+router.post('/editAddress/:id',userProfile.editAddress)
 //errorpage//
 // router.get('*',userRoutes.getErrorPage)
 

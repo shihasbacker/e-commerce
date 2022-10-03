@@ -40,5 +40,12 @@ module.exports={
         console.log(price)
         await wishlistModel.updateOne({userId:userId,"products.productId":productId},{"products.$.price":price})
 
+    },
+    delete:async(req,res)=>{
+        productId = req.body.product
+        userId = req.session.userId
+        console.log("hi from delete",req.session)
+        deletes = await wishlistModel.updateOne({ userId: userId }, { $pull: { products: { productId: req.body.product } } })  
+        res.json({})
     }
 }

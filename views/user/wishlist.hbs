@@ -1,4 +1,6 @@
 
+
+
   <body class="animsition">
     <!-- Header -->
     <header>
@@ -316,15 +318,15 @@
         
 
         <div class="row isotope-grid">
-          {{#each products}}
-          <div class="col-sm-6 col-md-4 col-lg-3 p-b-35 isotope-item {{this.category.category}}">
+          {{#each wishlistDatas.products}}
+          <div class="col-sm-6 col-md-4 col-lg-3 p-b-35 isotope-item {{this.productId.category}}">
             <!-- Block2 -->
             <div class="block2">
               <div class="block2-pic hov-img0">
-                <img src="/productImageUploads/{{this.imagepath.[0]}}" alt="IMG-PRODUCT" />
+                <img src="/productImageUploads/{{this.productId.imagepath.[0]}}" alt="IMG-PRODUCT" />
 
                 <a
-                  href="/quickView/{{this._id}}"
+                  href="/quickView/{{this.productId._id}}"
                   class="block2-btn flex-c-m stext-103 cl2 size-102 bg0 bor2 hov-btn1 p-lr-15 trans-04 "
                 >
                   Quick View
@@ -337,13 +339,13 @@
                     href="product-detail.html"
                     class="stext-104 cl4 hov-cl1 trans-04 js-name-b2 p-b-6"
                   >
-                    {{this.name}}
+                    {{this.productId.name}}
                   </a>
 
-                  <span class="stext-105 cl3"> ₹{{this.amount}} </span>
+                  <span class="stext-105 cl3"> ₹{{this.productId.amount}} </span>
                 </div>
 
-                <div class="block2-txt-child2 flex-r p-t-3">
+                {{!-- <div class="block2-txt-child2 flex-r p-t-3">
                   <a
                     href="#"
                     class="btn-addwish-b2 dis-block pos-relative js-addwish-b2"
@@ -359,7 +361,11 @@
                       alt="ICON"
                     />
                   </a>
-                </div>
+                </div> --}}
+                <span><div><button type="button" class="btn btn-dark  btn-sm">Add to Cart</button></div></span>
+                
+                <span><div><button type="button" onclick="deleteProduct('{{this.productId._id}}')" class="btn btn-danger ml-1 btn-sm">Delete</button></div></span>
+                
               </div>
             </div>
           </div>
@@ -842,5 +848,33 @@
     </script>
     <!--===============================================================================================-->
     <script src="js/main.js"></script>
+    <script>
+    function deleteProduct(proId) {
+
+    $.ajax({
+      url: '/deleteWishlist',
+      data: {
+        product: proId,
+
+      },
+
+      method: 'post',
+      success: (response) => {
+      
+        if (response) {
+          
+          // swal("Deleted Successflly");
+
+          
+          location.reload();
+          alert("deleted successfully")
+        } 
+
+      }
+
+        })
+        }
+</script>
+    
   </body>
 

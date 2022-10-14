@@ -1,11 +1,12 @@
 var express = require('express');
 var router = express.Router();
-const multer = require('multer')
+const multer = require('multer');
 
 
 // routes details file
 const adminRoutes = require('../controller/adminController');
 const sessionCheck = require('../middlewares/session')
+const bannerRoutes = require('../controller/bannerController')
 
 
 //multer//
@@ -19,7 +20,18 @@ const storage = multer.diskStorage({
     }
 });
 const upload = multer({ storage: storage });
-
+// --------------------------------------------------------------------------------------------------------------------------
+const storages = multer.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, './public/bannerImages');
+    },
+    filename: function (req, file, cb) {
+        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9)
+        ;
+        cb(null,uniqueSuffix + '-' +file.originalname   )
+    }
+});
+const uploads = multer({ storage: storages });
 
 //index//
 router.get('/',sessionCheck.adminSessionChecker,adminRoutes.adminIndexRoute);
@@ -53,7 +65,17 @@ router.get('/viewEditProduct/:id',adminRoutes.viewEditProduct)
 router.post('/editProduct/:id',upload.array('photos', 4),adminRoutes.editProduct)
 router.get('/deleteProduct/:id',adminRoutes.deleteProduct)
 
+router.get('/orders',adminRoutes.orders)
+router.get('/editStatus/:id',adminRoutes.editStatus)
+router.post('/editStatusButton/:id',adminRoutes.editStatusButton);
 
+//banner//
+router.get('/tableBanner',bannerRoutes.renderBanner)
+router.get('/viewEditBanner/:id',bannerRoutes.renderEditBanner);
+router.post('/editBanner/:id',uploads.single('image'),bannerRoutes.editBanner);
+router.get('/addBanner',bannerRoutes.addBanner)
+router.post('/addBanner',uploads.single('image'),bannerRoutes.addBannerButton)
+router.get('/deleteBanner/:id',bannerRoutes.deleteBanner)
 // router.get('*',adminRoutes.getErrorPage)
 module.exports = router;
 

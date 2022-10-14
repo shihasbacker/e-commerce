@@ -3,15 +3,16 @@ const bcrypt = require('bcrypt');
 const addressModel = require('../model/addressSchema');
 
 
+
 module.exports={
     userProfile:async (req,res)=>{
         userId = req.session.userId
         console.log(userId,'hihihihjihihih');
         let userDetails= await userModel.findOne({_id:userId}).lean()
-        // console.log(userDetails)
+        console.log("userDetails",userDetails)
         let addressData = await addressModel.find({userId:userId}).lean()
         // console.log(addressData)
-        res.render('user/userProfile',{userDetails,addressData})
+        res.render('user/userProfile',{userDetails,addressData,userPartials:true})
     },
     changeUsername:async(req,res)=>{
         // console.log(req.body.name)

@@ -3,7 +3,8 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
-
+var dotenv = require('dotenv');
+dotenv.config();
 
 const session = require("express-session");
 
@@ -20,11 +21,13 @@ var app = express();
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'hbs');
 
-app.engine('hbs',hbs.engine({extname:'hbs',defaultLayout:'user-layout',layoutsDir:__dirname+'/views/layout/',partialsDir  : 
+app.engine('hbs',hbs.engine({extname:'hbs',defaultLayout:'user-layout',layoutsDir:__dirname+'/views/layout/',
+partialsDir  : 
   //  path to your partials
-  path.join(__dirname, 'views/partials'), helpers: {
-    inc1: function (context) {
-      return context+1
+  path.join(__dirname, 'views/partials'), 
+  helpers: {
+    inc: function (value,context) {
+      return parseInt(value) + 1;
     },
     total: function (amount, discount, quantity) {
       return (amount - discount) * quantity;
@@ -33,6 +36,27 @@ app.engine('hbs',hbs.engine({extname:'hbs',defaultLayout:'user-layout',layoutsDi
       return (amount - discount);
     }
 } }));
+
+// app.engine(
+//   "hbs",
+//   hbs.engine({
+//     helpers: {
+//       inc: function (value, options) {
+//         return parseInt(value) + 1;
+//       },
+//       total: function (amount, quantity) {
+//         return amount * quantity;
+//       },
+//       singleTotal: function (amount, discount) {
+//         return parseInt(amount - discount);
+//       },
+//     },
+//     extname: "hbs",
+//     defaultLayout: "user-layout",
+//     layoutsDir: __dirname + '/views/layout/',
+//     partialsDir: __dirname + "/views/partials/",
+//   })
+// );
 
 app.use(logger('dev'));
 

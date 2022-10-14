@@ -1,6 +1,5 @@
 
 
-
 module.exports = {
     adminSessionChecker: (req,res,next)=>{
         if (req.session.loggedIn){

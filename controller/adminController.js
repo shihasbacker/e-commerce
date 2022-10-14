@@ -4,9 +4,11 @@ const bcrypt = require("bcrypt");
 const userModel = require("../model/userSchema");
 const productModel = require("../model/productSchema");
 const session = require("express-session");
+const orderModel = require('../model/orderSchema');
 
 const fs = require("fs");
 const path = require("path");
+const { findOne } = require("../model/addressSchema");
 
 let adminlayout = { layout: "admin-layout" };
 
@@ -212,7 +214,33 @@ exports.deleteProduct=async(req,res)=>{
   await productModel.findOneAndDelete({"_id":req.params.id},{$set:{"name":req.body.name,"brandName":req.body.brandName,"description":req.body.description,"category":req.body.category,"stock":req.body.stock,"amount":req.body.amount,"discount":req.body.discount,"imagepath":req.body.imagepath}})
   res.redirect('/admin/viewProducts')
 }
+exports.orders=async(req,res)=>{
+  let orderData = await orderModel.find().populate('userId').lean()
+  
+  res.render('admin/orders',{layout: false,orderData })
+}
+exports.editStatus= async (req,res)=>{
+  let orderId = req.params.id
+  //console.log("this is order id in params::",id);
+  let orderData = await orderModel.findOne({_id:orderId}).lean()
+  // console.log("orderdata from status edit",orderData);
+  let placed,shipped,delivered,cancelled;
+  if(orderData.status == 'placed') {placed=true}
+  else if(orderData.status=='shipped') {shipped = true;}
+  else if(orderData.status=='delivered') {delivered = true}
+  else if(orderData.status=='cancelled') {cancelled = true}
+  
+  // console.log("status",stat);
+  res.render('admin/editStatus',{layout:'admin-layout',orderData,placed,shipped,delivered,cancelled});
+}
 
+exports.editStatusButton=async(req,res)=>{
+  let orderId = req.params.id
+  // console.log("params id:",orderId)
+  // console.log("req.body",req.body)
+  await orderModel.findOneAndUpdate({_id:orderId},{$set:{status:req.body.status}})
+  res.redirect('/admin/orders');
+}
 
 // module.exports = {
 //     editCategoryButton: async (req,res)=>{

@@ -3,13 +3,22 @@ const productModel = require("../model/productSchema")
 const categoryModel = require("../model/categorySchema")
 const bcrypt = require('bcrypt');
 const { router } = require("../app");
+const orderModel = require("../model/orderSchema");
+const bannerModel = require("../model/bannerSchema");
 
 
 
 exports.indexRoute = async function(req,res,next){
     let products = await productModel.find().populate('category').lean();
-   
-    res.render('user/index',{products});
+    let categoryData = await categoryModel.find().lean()
+    let bannerData = await bannerModel.find().populate('product').lean()
+    res.render('user/index',{products,categoryData,bannerData,userPartials:true});
+}
+
+exports.allProducts = async (req,res)=>{
+    let products = await productModel.find().populate('category').lean();
+    let categoryData = await categoryModel.find().lean()
+    res.render('user/allProducts',{products,categoryData,userPartials:true});
 }
 
 //signup page
@@ -70,10 +79,34 @@ exports.getLogout=function(req,res){
 exports.quickView=async(req,res)=>{
   productId = req.params.id
   let productDetails = await productModel.findOne({_id:productId}).lean()
-  res.render('user/productDetail',{productDetails})
+  res.render('user/productDetail',{productDetails,userPartials:true})
 }
 
-
+exports.myOrders=async(req,res)=>{
+    userId = req.session.userId
+    let orderData = await orderModel.find({userId:userId}).populate('products.productId').lean()
+    // console.log("orderData form my order:",orderData)
+    //let userData = await userModel.findOne({_id:userId}).lean()
+    for(let i = 0; i < orderData.length; i++) {
+        if (orderData[i].status=="cancelled") {
+          orderData[i].cancelled=true;
+        } 
+        else if (orderData[i].status=="delivered"){
+            orderData[i].delivered=true;
+        }
+      }
+    // let cancelled;
+    // if(orderData.status=='cancelled')   {cancelled = true;}
+    res.render('user/myOrders',{orderData,userPartials:true})
+}
+exports.cancelOrder=async(req,res)=>{
+    userId=req.session.userId
+    orderId = req.body.orderId
+    //console.log("userId session:",userId);
+    //console.log("orderId ajax:",orderId);
+    await orderModel.findOneAndUpdate({_id:orderId},{$set:{status:'cancelled'}})
+    res.json({status: "success"})
+}
 
 // exports.sample=(req,res)=>{
 //     res.render('user/product-detail')

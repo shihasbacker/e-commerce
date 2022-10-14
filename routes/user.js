@@ -10,9 +10,14 @@ const cartRoutes = require('../controller/cartController');
 const cartController = require('../controller/cartController');
 const wishlistRoutes =  require('../controller/wishlistController')
 const userProfile = require('../controller/userProfileController')
+const checkoutRoutes = require('../controller/checkoutController')
+const orderRoutes = require('../controller/orderController');
+const razorpayController = require('../controller/razorpayController');
+const orderController = require('../controller/orderController');
 
 
 router.get('/',sessionCheck.userSessionChecker,userRoutes.indexRoute);
+router.get('/allProducts',userRoutes.allProducts)
 router.get('/signup',userRoutes.getSignup);
 router.get('/login',userRoutes.getLogin);
 router.post('/registerUser',userRoutes.SignupAction);
@@ -26,8 +31,8 @@ router.get('/quickView/:id',sessionCheck.userSessionChecker,userRoutes.quickView
 router.get('/addToCart/:id',sessionCheck.userSessionChecker,cartRoutes.addToCart)
 router.get('/viewCart',sessionCheck.userSessionChecker,cartRoutes.viewCart)
 
-router.post('/incrementValue',cartRoutes.incrementValue)
-router.post('/removeProduct',cartRoutes.removeProduct)
+router.post('/incrementValue',sessionCheck.userSessionChecker,cartRoutes.incrementValue)
+router.post('/removeProduct',sessionCheck.userSessionChecker,cartRoutes.removeProduct)
 
 
 //wishlist//
@@ -43,8 +48,17 @@ router.get('/addAddress',sessionCheck.userSessionChecker,userProfile.addAddress)
 router.post('/submitAddress',sessionCheck.userSessionChecker,userProfile.submitAddress)
 router.post('/deleteAddress',userProfile.deleteAddress)
 router.post('/editAddress/:id',userProfile.editAddress)
-//errorpage//
-// router.get('*',userRoutes.getErrorPage)
+
+
+router.get('/checkout',sessionCheck.userSessionChecker,checkoutRoutes.checkoutPage)
+router.post('/billingAddress',sessionCheck.userSessionChecker,checkoutRoutes.billingAddress)
+router.post('/confirmOrderButton',sessionCheck.userSessionChecker,orderRoutes.confirmOrderButton)
+
+router.post('/verifyRazorpay', sessionCheck.userSessionChecker, orderController.verifyPay);
+router.get('/renderConfirmation', sessionCheck.userSessionChecker, orderController.confirmationPage) 
+
+router.get('/myOrders',sessionCheck.userSessionChecker,userRoutes.myOrders)
+router.post('/cancelOrder',sessionCheck.userSessionChecker,userRoutes.cancelOrder)
 
 module.exports = router;
 

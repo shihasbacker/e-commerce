@@ -30,8 +30,9 @@ module.exports={
             {userId:userId}
         ).populate("products.productId").lean();
         console.log('cart data is:',cartData)
-        totalAmount = await cartFunctions.totalAmount(cartData);
-        res.render('user/shoppingCart',{cartData, totalAmount})
+        let totalAmount;
+        if(cartData)  {totalAmount = await cartFunctions.totalAmount(cartData);}
+        res.render('user/shoppingCart',{cartData, totalAmount,userPartials:true})
     },
     
        
@@ -75,6 +76,5 @@ module.exports={
         console.log('delete');
         res.status(200).json({ message: "the product is successfully deleted" });
     }
-    
       
 }

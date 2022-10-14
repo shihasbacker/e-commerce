@@ -46,7 +46,7 @@ const addressSchema = new mongoose.Schema({
     //   type: {
     //     type: String,
     //   }
-  });
+  },{timestamps:true});
   
   const addressModel = mongoose.model("address", addressSchema);
   

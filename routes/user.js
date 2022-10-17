@@ -22,12 +22,12 @@ router.get('/',sessionCheck.userSessionChecker,userRoutes.indexRoute);
 router.get('/allProducts',userRoutes.allProducts)
 router.get('/signup',userRoutes.getSignup);
 router.get('/login',userRoutes.getLogin);
-router.post('/registerUser',userRoutes.SignupAction);
+router.post('/registerUser/',userRoutes.SignupAction);
 router.post('/loginSubmit',userRoutes.LoginAction)
 router.get('/logout',userRoutes.getLogout)
 
-router.get('/otp',sessionCheck.userSessionChecker,userRoutes.otpVerify)
-router.post('/otp',sessionCheck.userSessionChecker,userRoutes.postOtp)
+//router.get('/otp',sessionCheck.userSessionChecker,userRoutes.otpVerify)
+router.post('/otp/:id',userRoutes.postOtp)
 
 //product-view-page//
 router.get('/quickView/:id',sessionCheck.userSessionChecker,userRoutes.quickView)

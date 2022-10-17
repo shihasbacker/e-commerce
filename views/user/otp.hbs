@@ -19,11 +19,11 @@
                 <img src="/user/images/otpImage.png" style="max-width: 50px;">
                 <h5 class="mb-2">OTP VERIFICATION</h5>
                 <div>
-                    <small>Code has been send to +91**{{number}}</small>
+                    <small>Code has been send to +91********</small>
                 </div>
             </div>
 
-            <form action="/otp" id="otp-form" method="post">
+            <form action="/otp/{{id}}" id="otp-form" method="post">
                 <div class="form-outline mb-4">
                     <input type="number" name="otp" id="form3Example4cdg" class="form-control form-control-lg"
                         placeholder="OTP" />

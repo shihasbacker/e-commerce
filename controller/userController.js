@@ -5,7 +5,7 @@ const bcrypt = require('bcrypt');
 const { router } = require("../app");
 const orderModel = require("../model/orderSchema");
 const bannerModel = require("../model/bannerSchema");
-const twilioControler = require('../controller/twilioController')
+const twilioController = require('../controller/twilioController')
 
 
 exports.indexRoute = async function(req,res,next){
@@ -34,10 +34,10 @@ exports.SignupAction= async function(req,res){
         return res.send('old user found')
     }
     let newUser = await userModel.create(req.body)
-    console.log(newUser)
-    req.session.userLogin = true;
-    req.session.userId = newUser._id
-    res.redirect("/")
+    // console.log(newUser)
+    // req.session.userLogin = true;
+    // req.session.userId = newUser._id
+    // res.redirect("/")
 
 
     // req.session.userId = newUser._id
@@ -49,38 +49,56 @@ exports.SignupAction= async function(req,res){
     //   twilioControler.sendOtp(phone)
     // console.log("ivdeee:")
     //   res.redirect('/otp')
-    // twilioControler.sendOtp(newUser)
+    console.log("new user",newUser)
+    twilioController.sendOtp(newUser)
 
-
-    // let id = newUser._id
+    let id = newUser._id
+    res.render('user/otp',{id})
 
 
       //console.log(req.body, "otp")
     
 }
-exports.postOtp =function (req, res, next) {
-    console.log(req.body,"shias")
-    console.log("req.session:",req.session)
-    let phone = req.session.user.phoneNumber
-    twilioControler.verifyOtp(phone, req.body.otp).then(async(response) => {
-      console.log("responsese",response)
+exports.postOtp =async function (req, res, next) {
+    // console.log(req.body,"shias")
+    // console.log("req.session:",req.session)
+    // let phone = req.session.user.phoneNumber
+    // twilioControler.verifyOtp(phone, req.body.otp).then(async(response) => {
+    //   console.log("responsese",response)
   
-      console.log(req.session.user.phoneNumber, "sessionbody")
-      console.log(response.valid,"vaild ddd");
+    //   console.log(req.session.user.phoneNumber, "sessionbody")
+    //   console.log(response.valid,"vaild ddd");
       
-      if (response.valid==true) {
+    //   if (response.valid==true) {
   
       
-        await userModel.findOneAndUpdate({ _id: req.session.userId }, { $set: { otpVerified: true } })
-        req.session.userLogin = true;
-        res.redirect('/')
+    //     await userModel.findOneAndUpdate({ _id: req.session.userId }, { $set: { otpVerified: true } })
+    //     req.session.userLogin = true;
+    //     res.redirect('/')
         
-      }
-      else {
-        res.redirect('/signup')
-      }
+    //   }
+    //   else {
+    //     res.redirect('/signup')
+    //   }
   
-    })
+    // })
+    console.log('ethiii');
+    console.log(req.params.id);
+    const userdata = await userModel.findOne({ _id: req.params.id }).lean();
+    console.log(userdata);
+    console.log(req.body.otp);
+    let otps = req.body.otp;
+    let verification=await twilioController.verifyOtp(otps, userdata);
+    if (verification) {
+
+      req.session.userLogin = true;
+      req.session.userId = userdata._id
+      await userModel.findOneAndUpdate({ _id: req.session.userId }, { $set: { otpVerified: true } })
+      res.redirect('/');
+    }
+    else {
+      res.redirect('/signup')
+    }
   
   
   }

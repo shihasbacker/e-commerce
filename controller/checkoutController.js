@@ -1,6 +1,7 @@
 const addressModel = require('../model/addressSchema')
 let cartModel = require("../model/cartschema");
 const cartFunctions = require('../controller/cartFunctions');
+const couponModel = require('../model/couponSchema')
 
 module.exports={
     checkoutPage:async(req,res)=>{
@@ -9,7 +10,8 @@ module.exports={
         let cartData = await cartModel.findOne({userId:userId}).populate("products.productId").lean()
         console.log("cartDataFromCheckout page",cartData)
         totalAmount = await cartFunctions.totalAmount(cartData);
-        res.render('user/checkOut',{addressData,cartData,totalAmount})
+        let couponData = await couponModel.find().lean()
+        res.render('user/checkOut',{addressData,cartData,totalAmount,couponData})
     },
     billingAddress:async(req,res)=>{
         userId = req.session.userId;

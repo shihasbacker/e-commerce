@@ -29,6 +29,10 @@ partialsDir  :
     inc: function (value,context) {
       return parseInt(value) + 1;
     },
+    formatString(date) {
+      newdate = date.toUTCString()
+      return newdate.slice(0, 16)
+    },
     total: function (amount, discount, quantity) {
       return (amount - discount) * quantity;
     },
@@ -37,31 +41,7 @@ partialsDir  :
     }
 } }));
 
-// app.engine(
-//   "hbs",
-//   hbs.engine({
-//     helpers: {
-//       inc: function (value, options) {
-//         return parseInt(value) + 1;
-//       },
-//       total: function (amount, quantity) {
-//         return amount * quantity;
-//       },
-//       singleTotal: function (amount, discount) {
-//         return parseInt(amount - discount);
-//       },
-//     },
-//     extname: "hbs",
-//     defaultLayout: "user-layout",
-//     layoutsDir: __dirname + '/views/layout/',
-//     partialsDir: __dirname + "/views/partials/",
-//   })
-// );
-
 app.use(logger('dev'));
-
-// initialize body-parser to parse incoming parameters requests to req.body
-// app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));

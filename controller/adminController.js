@@ -12,10 +12,34 @@ const { findOne } = require("../model/addressSchema");
 
 let adminlayout = { layout: "admin-layout" };
 
-exports.adminIndexRoute = function (req, res, next) {
+exports.adminIndexRoute =async function (req, res, next) {
+  let delivered = await orderModel.find({status:'delivered'},{status:1,_id:0}).lean()
+        console.log(delivered,"delivereddd dd cosanui ==");
+  let deliveredCount = delivered.length
+  let shipped = await orderModel.find({status:'shipped'},{status:1,_id:0}).lean()
+  let shippedCount = shipped.length
+  let cancelled = await orderModel.find({status:'cancelled'},{status:1,_id:0}).lean()
+  let cancelledCount = cancelled.length
+  let placed = await orderModel.find({status:'placed'},{status:1,_id:0}).lean()
+  let placedCount = placed.length
+
+  let orderData = await orderModel.find().populate('products.productId').lean()
+  //  console.log(orderData,"orderData shhas")
+    const deliveredOrder = orderData.filter(e=>e.status=='delivered')
+   // console.log("delivered Order shihas",deliveredOrder);
+    const TotalRevenue = deliveredOrder.reduce((accr,crr)=>accr+crr.grandTotal,0)
+  //  console.log(TotalRevenue,"total revenue shihas");
+
+    const eachDaySale = await orderModel.aggregate([{$match:{status:"delivered"}},{$group: {_id: {day: {$dayOfMonth: "$createdAt"},month: {$month: "$createdAt"}, year:{$year: "$createdAt"}},total: {$sum: "$grandTotal"}}}]).sort({_id: -1})
+   console.log('eachDay sale:',eachDaySale)
+   let today=new Date()
+   console.log(today,":today");
+  //  let day{day}
+  //  let todayRevenue = eachDaySale.aggregate([{$match:{}}])
+ // console.log('delivered count::',deliveredCount);
   res.render("admin/index", {
     admin: req.session.admin,
-    layout: "admin-layout",
+    layout: "admin-layout", deliveredCount,shippedCount,cancelledCount,placedCount,TotalRevenue,eachDaySale
   });
 };
 
@@ -215,7 +239,7 @@ exports.deleteProduct=async(req,res)=>{
   res.redirect('/admin/viewProducts')
 }
 exports.orders=async(req,res)=>{
-  let orderData = await orderModel.find().populate('userId').lean()
+  let orderData = await orderModel.find().sort({createdAt:-1}).populate('userId').lean()
   
   res.render('admin/orders',{layout: false,orderData })
 }

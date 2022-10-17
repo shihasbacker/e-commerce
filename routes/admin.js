@@ -7,6 +7,8 @@ const multer = require('multer');
 const adminRoutes = require('../controller/adminController');
 const sessionCheck = require('../middlewares/session')
 const bannerRoutes = require('../controller/bannerController')
+const couponRoutes = require('../controller/couponController');
+const cartController = require('../controller/cartController');
 
 
 //multer//
@@ -76,6 +78,15 @@ router.post('/editBanner/:id',uploads.single('image'),bannerRoutes.editBanner);
 router.get('/addBanner',bannerRoutes.addBanner)
 router.post('/addBanner',uploads.single('image'),bannerRoutes.addBannerButton)
 router.get('/deleteBanner/:id',bannerRoutes.deleteBanner)
+
+//coupon//
+router.get('/viewCoupon',couponRoutes.couponTable)
+router.get('/addCoupon',couponRoutes.renderAddCoupon)
+router.post('/addCoupon',couponRoutes.addCoupon)
+router.get('/editCoupon/:id',couponRoutes.renderEditCoupon)
+router.post('/editCoupon/:id',couponRoutes.editCoupon);
+router.get('/deleteCoupon/:id',couponRoutes.deleteCoupon)
+
 // router.get('*',adminRoutes.getErrorPage)
 module.exports = router;
 

@@ -3,7 +3,8 @@ const cartFunctions = require('../controller/cartFunctions');
 
 module.exports={
     addToCart: async(req,res,next)=>{
-        const productId = req.params.id
+        const productId = req.body.productId
+        //console.log(req.body)
         let userId = req.session.userId;
         // console.log(userId, "this is the user id from the session that is stored");
         // console.log(productId);
@@ -13,12 +14,16 @@ module.exports={
             productexist = await cartModel.findOne({ userId: userId, "products.productId": productId });
             if (productexist) {
                 await cartModel.updateOne({ userId: userId, "products.productId": productId }, { $inc: { "products.$.quantity": 1 } });
+                res.json({message:"success"})
             }
             else {
                 await cartModel.findOneAndUpdate({ userId: userId }, {$push:{products:{productId:productId,quantity:1}}});
+                res.json({message:"success"})
             }
         }
-        else { await cartModel.create({ userId: userId, products:{productId:productId,quantity:1}} ); }
+        else { await cartModel.create({ userId: userId, products:{productId:productId,quantity:1}} );
+        res.json({message:"success"})
+        }
 
         
 
@@ -31,21 +36,25 @@ module.exports={
         ).populate("products.productId").lean();
         console.log('cart data is:',cartData)
         let totalAmount;
-        if(cartData)  {totalAmount = await cartFunctions.totalAmount(cartData);}
-        res.render('user/shoppingCart',{cartData, totalAmount,userPartials:true})
+
+
+        if(cartData){
+    // To check whether a cart is emypty-------------------------------------------------------------------
+            if (cartData.products[0]) {
+            totalAmount = await cartFunctions.totalAmount(cartData);
+            return res.render('user/shoppingCart', { cartData, totalAmount ,userPartials:true})
+        }   
+        res.render("user/emptyCart",{userPartials:true})
+    }
+        else {
+            
+            res.render('user/emptyCart',{userPartials:true});
+    }
+
+
+
+        //res.render('user/shoppingCart',{cartData, totalAmount,userPartials:true})
     },
-    
-       
-        
-        // console.log('success');
-        // totalAmount = await cartFunctions.totalAmount(cartData)
-        
-        // console.log(totalAmount);
-        // return res.json({ message: 'ethi', quantity, totalAmount })
-        //stock = await productModel.findOne({ _id: req.body.product}, { _id: 0, stock: 1 }).lean();
-        // if (stock.stock<=0) {
-        //  return res.json({message:'sorry the product is out of stock click the link below to move back to cart'})            
-        // }
 
         
     incrementValue:async(req,res)=>{
@@ -78,3 +87,6 @@ module.exports={
     }
       
 }
+
+
+

@@ -14,6 +14,8 @@ const checkoutRoutes = require('../controller/checkoutController')
 const orderRoutes = require('../controller/orderController');
 const razorpayController = require('../controller/razorpayController');
 const orderController = require('../controller/orderController');
+const couponRoutes = require('../controller/couponController');
+
 
 
 router.get('/',sessionCheck.userSessionChecker,userRoutes.indexRoute);
@@ -24,11 +26,14 @@ router.post('/registerUser',userRoutes.SignupAction);
 router.post('/loginSubmit',userRoutes.LoginAction)
 router.get('/logout',userRoutes.getLogout)
 
+router.get('/otp',sessionCheck.userSessionChecker,userRoutes.otpVerify)
+router.post('/otp',sessionCheck.userSessionChecker,userRoutes.postOtp)
+
 //product-view-page//
 router.get('/quickView/:id',sessionCheck.userSessionChecker,userRoutes.quickView)
 //cart//
 
-router.get('/addToCart/:id',sessionCheck.userSessionChecker,cartRoutes.addToCart)
+router.post('/addToCart',sessionCheck.userSessionChecker,cartRoutes.addToCart)
 router.get('/viewCart',sessionCheck.userSessionChecker,cartRoutes.viewCart)
 
 router.post('/incrementValue',sessionCheck.userSessionChecker,cartRoutes.incrementValue)
@@ -59,6 +64,8 @@ router.get('/renderConfirmation', sessionCheck.userSessionChecker, orderControll
 
 router.get('/myOrders',sessionCheck.userSessionChecker,userRoutes.myOrders)
 router.post('/cancelOrder',sessionCheck.userSessionChecker,userRoutes.cancelOrder)
+
+router.post('/couponValidation',sessionCheck.userSessionChecker,couponRoutes.validateCoupon)
 
 module.exports = router;
 

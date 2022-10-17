@@ -219,42 +219,54 @@
   })
 }
 	
-  
-    function removeProduct(proId, index) {
-		
 
-		 axios.post('/removeProduct',  {
-                product: proId,
+	function removeProduct(proId, index) {
+    event.preventDefault();
+
+    Swal.fire({
+      title: 'Are you sure?',
+      text: "You won't be able to revert this!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, delete it!'
+    }).then((result) => {
+      if (result.isConfirmed) {
+
+        $.ajax({
+
+          url: '/removeProduct',
+          data: {
+            product: proId,
                 index: index,
-            })
-      .then(function (response) {
-		console.log(response)
-		location.reload()
-		
-        Swal.fire({
-         title: 'sucess',
-         text: response.data.message,
-          footer: '<a href="">Why do I have this issue?</a>'
+
+          },
+
+          method: 'post',
+          success: (response) => {
+
+            if (response) {
+                          location.reload()
+            }
+
+          }
+
         })
 
       }
-	  )
-      .catch(function (error) {
-        Swal.fire({
-          title: 'failure',
-          text: error.data.message,
-          footer: '<a href="">Why do I have this issue?</a>'
-        })
+    })
 
-
-      });
-	}
-
-
-
-
+  }
 
 </script>
+
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+
+
+
+
 
 </body>
 

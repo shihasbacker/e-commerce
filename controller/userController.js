@@ -5,7 +5,7 @@ const bcrypt = require('bcrypt');
 const { router } = require("../app");
 const orderModel = require("../model/orderSchema");
 const bannerModel = require("../model/bannerSchema");
-
+const twilioControler = require('../controller/twilioController')
 
 
 exports.indexRoute = async function(req,res,next){
@@ -38,7 +38,52 @@ exports.SignupAction= async function(req,res){
     req.session.userLogin = true;
     req.session.userId = newUser._id
     res.redirect("/")
+
+
+    // req.session.userId = newUser._id
+    // req.session.user = newUser
+    //   req.session.userLogin = true;
+    //   req.session.phoneNumber = req.body.phoneNumber
+    // console.log("req.session:::",req.session)
+    // let phone = req.session.user.phoneNumber
+    //   twilioControler.sendOtp(phone)
+    // console.log("ivdeee:")
+    //   res.redirect('/otp')
+    // twilioControler.sendOtp(newUser)
+
+
+    // let id = newUser._id
+
+
+      //console.log(req.body, "otp")
+    
 }
+exports.postOtp =function (req, res, next) {
+    console.log(req.body,"shias")
+    console.log("req.session:",req.session)
+    let phone = req.session.user.phoneNumber
+    twilioControler.verifyOtp(phone, req.body.otp).then(async(response) => {
+      console.log("responsese",response)
+  
+      console.log(req.session.user.phoneNumber, "sessionbody")
+      console.log(response.valid,"vaild ddd");
+      
+      if (response.valid==true) {
+  
+      
+        await userModel.findOneAndUpdate({ _id: req.session.userId }, { $set: { otpVerified: true } })
+        req.session.userLogin = true;
+        res.redirect('/')
+        
+      }
+      else {
+        res.redirect('/signup')
+      }
+  
+    })
+  
+  
+  }
 
 //login page
 exports.getLogin = function(req,res,next){
@@ -84,7 +129,7 @@ exports.quickView=async(req,res)=>{
 
 exports.myOrders=async(req,res)=>{
     userId = req.session.userId
-    let orderData = await orderModel.find({userId:userId}).populate('products.productId').lean()
+    let orderData = await orderModel.find({userId:userId}).sort({createdAt:-1}).populate('products.productId').lean()
     // console.log("orderData form my order:",orderData)
     //let userData = await userModel.findOne({_id:userId}).lean()
     for(let i = 0; i < orderData.length; i++) {
@@ -106,6 +151,9 @@ exports.cancelOrder=async(req,res)=>{
     //console.log("orderId ajax:",orderId);
     await orderModel.findOneAndUpdate({_id:orderId},{$set:{status:'cancelled'}})
     res.json({status: "success"})
+}
+exports.otpVerify=(req,res)=>{
+    res.render('user/otp')
 }
 
 // exports.sample=(req,res)=>{

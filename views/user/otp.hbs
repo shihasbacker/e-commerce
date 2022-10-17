@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>OTP Verification</title>
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-gH2yIJqKdNHPEq0n4Mqa/HGKIhSkIHeL5AyhkYV8i59U5AR6csBvApHHNl/vI1Bx" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css" />
+<!--bootstrap links above -->
+
+
+</head>
+
+<body>
+    <div class="container mt-5 d-flex justify-content-center align-items-center">
+        <div class="card p-4 text-center">
+            <div class="card-header p-5">
+                <img src="/user/images/otpImage.png" style="max-width: 50px;">
+                <h5 class="mb-2">OTP VERIFICATION</h5>
+                <div>
+                    <small>Code has been send to +91**{{number}}</small>
+                </div>
+            </div>
+
+            <form action="/otp" id="otp-form" method="post">
+                <div class="form-outline mb-4">
+                    <input type="number" name="otp" id="form3Example4cdg" class="form-control form-control-lg"
+                        placeholder="OTP" />
+                    {{!-- <label class="form-label" for="form3Example4cdg">Password</label> --}}
+                </div>
+                {{#if invalid}}
+                <p class="text-danger">{{invalid}}</p>
+
+
+                {{/if}}
+                <div>
+
+                    <small>
+                        didn't get the otp
+                        <a href="#" class="text-decoration-none">Resend</a>
+                    </small>
+                </div>
+                <div class="mt-3 mb-5">
+                    <button class="btn btn-success px-4 verify-btn" type="submit">verify</button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-A3rJD856KowSb7dwlZdYEkO39Gagi7vIsF0jrRAoQmDKKtQBHUuLZ9AsSv4jD4Xa"
+    crossorigin="anonymous"></script>
+</body>
+
+</html>

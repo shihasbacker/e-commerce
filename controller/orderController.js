@@ -8,6 +8,7 @@ const { totalAmount } = require('../controller/cartFunctions');
 const couponModel = require('../model/couponSchema');
 
 
+
 module.exports = {
 
     confirmOrderButton: async (req, res) => {
@@ -19,7 +20,7 @@ module.exports = {
 
         let cartData = await cartModel.findOne({ userId: userId }).populate('products.productId').lean()
        // console.log("cartData from checkout page page::",cartData);
-
+        // req.session.cartData = cartData._id
         var totalAmount = await cartFunctions.totalAmount(cartData);
         //console.log("totalAmount",totalAmount);
         let totalAmounts = totalAmount * 100;
@@ -56,6 +57,7 @@ module.exports = {
             // console.log("session data ajax:", req.session)
             razorData = await razorpayController.generateRazorpy(orderData._id, totalAmounts)
             
+           
 
             await orderModel.findOneAndUpdate({ _id: orderData._id }, { orderId: razorData.id });
             //console.log("razordata returns;",razorData);
@@ -83,7 +85,10 @@ module.exports = {
             }
     },
     confirmationPage: async(req, res, next) => {
-        
+        console.log(req.session,"req.session");
+
+        // let cartId = req.session.cartData
+        await cartModel.findOneAndDelete({userId:userId})
         // let orderDataPopulated = await orderModel.findOne({_id:req.session.confirmationData.orderDataPopulated._id}).populate('products.productId').lean()
         // console.log("orderDataPopulated:::",orderDataPopulated)
         let orderDataPopulated = req.session.confirmationData.orderDataPopulated

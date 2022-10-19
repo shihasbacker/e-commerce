@@ -6,13 +6,15 @@ const { router } = require("../app");
 const orderModel = require("../model/orderSchema");
 const bannerModel = require("../model/bannerSchema");
 const twilioController = require('../controller/twilioController')
-
+const count = require('../controller/cartWishlistCount')
 
 exports.indexRoute = async function(req,res,next){
     let products = await productModel.find().populate('category').lean();
     let categoryData = await categoryModel.find().lean()
     let bannerData = await bannerModel.find().populate('product').lean()
-    res.render('user/index',{products,categoryData,bannerData,userPartials:true});
+    let cartCount = await count.getCartCount(req,res);
+    let wishlistCount = await count.getWishlistCount(req,res)
+    res.render('user/index',{products,categoryData,bannerData,cartCount,wishlistCount,userPartials:true});
 }
 
 exports.allProducts = async (req,res)=>{
@@ -92,11 +94,11 @@ exports.postOtp =async function (req, res, next) {
     if (verification) {
 
       req.session.userLogin = true;
-      req.session.userId = userdata._id
-      await userModel.findOneAndUpdate({ _id: req.session.userId }, { $set: { otpVerified: true } })
+      req.session.userId = userdata._id;
       res.redirect('/');
     }
     else {
+      await userModel.findOneAndDelete({ _id: req.params.id }).lean();
       res.redirect('/signup')
     }
   
@@ -142,7 +144,9 @@ exports.getLogout=function(req,res){
 exports.quickView=async(req,res)=>{
   productId = req.params.id
   let productDetails = await productModel.findOne({_id:productId}).lean()
-  res.render('user/productDetail',{productDetails,userPartials:true})
+  let cartCount = await count.getCartCount(req,res);
+  let wishlistCount = await count.getWishlistCount(req,res)
+  res.render('user/productDetail',{productDetails,cartCount,wishlistCount,userPartials:true})
 }
 
 exports.myOrders=async(req,res)=>{
@@ -170,9 +174,9 @@ exports.cancelOrder=async(req,res)=>{
     await orderModel.findOneAndUpdate({_id:orderId},{$set:{status:'cancelled'}})
     res.json({status: "success"})
 }
-exports.otpVerify=(req,res)=>{
-    res.render('user/otp')
-}
+// exports.otpVerify=(req,res)=>{
+//     res.render('user/otp')
+// }
 
 // exports.sample=(req,res)=>{
 //     res.render('user/product-detail')

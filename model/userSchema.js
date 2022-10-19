@@ -11,10 +11,7 @@ const userSchema = new mongoose.Schema({
     phoneNumber: Number,
     password: String,
     block: Boolean,
-    otpVerified:{
-      type: Boolean,
-      default: false
-    },
+    
   });
 
     userSchema.pre("save", async function(){

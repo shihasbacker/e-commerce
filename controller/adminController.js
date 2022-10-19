@@ -215,7 +215,7 @@ exports.editProduct = async (req, res) => {
       .findOne({ "_id:": req.params.id }, { imagepath: 1, _id: 0 })
       .lean();
     console.log(imagepat);
-    imagepat.imagepath.map((i) => fs.unlinkSync('public/productImageUploads/'+i));
+    //imagepat.imagepath.map((i) => fs.unlinkSync('public/productImageUploads/'+i));
     req.body.imagepath = arrImages;
     await productModel.findOneAndUpdate(
       { "_id": req.params.id },
@@ -265,6 +265,7 @@ exports.editStatusButton=async(req,res)=>{
   await orderModel.findOneAndUpdate({_id:orderId},{$set:{status:req.body.status}})
   res.redirect('/admin/orders');
 }
+
 
 // module.exports = {
 //     editCategoryButton: async (req,res)=>{

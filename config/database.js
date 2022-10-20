@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-const connectDatabase=process.env.MONGO_CONNECTION_ID
+const connectDatabase = process.env.MONGO_CONNECTION_ID
 mongoose.connect(connectDatabase, {
     useNewUrlParser: true,
     useUnifiedTopology: true,

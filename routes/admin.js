@@ -87,15 +87,27 @@ router.get('/editCoupon/:id',couponRoutes.renderEditCoupon)
 router.post('/editCoupon/:id',couponRoutes.editCoupon);
 router.get('/deleteCoupon/:id',couponRoutes.deleteCoupon)
 
-router.use((req,res,next) => {
-    next(createError(404))
-  })
+// router.use((req,res,next) => {
+//     next(createError(404))
+//   })
   
-  router.use((err,req,res,next) => {
+//   router.use((err,req,res,next) => {
+//     console.log("admin error route handler");
+//     res.status(err.status || 500);
+//     res.render('admin/adminError')
+//   })
+
+
+  router.use((req,res,next) => {
+    //next(createError(404))
+    res.render("admin/error")
+})
+
+router.use((err,req,res,next) => {
     console.log("admin error route handler");
     res.status(err.status || 500);
     res.render('admin/adminError')
-  })
+})
 
 // router.get('*',adminRoutes.getErrorPage)
 module.exports = router;

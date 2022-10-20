@@ -36,7 +36,7 @@ router.get('/quickView/:id',sessionCheck.userSessionChecker,userRoutes.quickView
 router.post('/addToCart',sessionCheck.userSessionChecker,cartRoutes.addToCart)
 router.get('/viewCart',sessionCheck.userSessionChecker,cartRoutes.viewCart)
 
-router.post('/incrementValue',sessionCheck.userSessionChecker,cartRoutes.incrementValue)
+router.post('/changeQuantity',sessionCheck.userSessionChecker,cartRoutes.changeQuantity)
 router.post('/removeProduct',sessionCheck.userSessionChecker,cartRoutes.removeProduct)
 
 

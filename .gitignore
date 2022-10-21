@@ -2,12 +2,6 @@
 *.env
 /data.json
 
-
-# Ignoring images 
-/public/productImageUploads/
-/public/bannerImages/
-
-
 # Ignore files related to installed npm packages
 /node_modules
 

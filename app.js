@@ -26,7 +26,7 @@ partialsDir  :
   //  path to your partials
   path.join(__dirname, 'views/partials'), 
   helpers: {
-    inc: function (value,context) {
+    inc: function (value,context) {  
       return parseInt(value) + 1;
     },
     formatString(date) {

@@ -1,6 +1,6 @@
 const userModel = require('../model/userSchema')
 const productModel = require("../model/productSchema");
-let cartModel = require("../model/cartschema");
+let cartModel = require("../model/cartSchema");
 const orderModel = require('../model/orderSchema');
 const razorpayController = require('../controller/razorpayController')
 const cartFunctions = require('../controller/cartFunctions');

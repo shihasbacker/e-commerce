@@ -1,4 +1,4 @@
-let cartModel = require("../model/cartschema")
+let cartModel = require("../model/cartSchema")
 let wishlistModel = require('../model/wishlistSchema')
 
 module.exports = {

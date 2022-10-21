@@ -1,5 +1,5 @@
 const addressModel = require('../model/addressSchema')
-let cartModel = require("../model/cartschema");
+let cartModel = require("../model/cartSchema");
 const cartFunctions = require('../controller/cartFunctions');
 const couponModel = require('../model/couponSchema')
 

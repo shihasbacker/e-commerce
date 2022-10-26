@@ -5,14 +5,14 @@ module.exports = {
     couponTable: async (req, res, next) => {
         try {
             let couponData = await couponModel.find().lean()
-            res.render('admin/couponTable', { layout: 'admin-layout', couponData });
+            res.render('admin/couponTable', { layout: 'admin-layout', couponData , adminPartials:true});
         } catch (error) {
             next(error)
         }
     },
     renderAddCoupon: (req, res, next) => {
         try {
-            res.render('admin/addCoupon', { layout: 'admin-layout' })
+            res.render('admin/addCoupon', { layout: 'admin-layout', adminPartials:true })
         } catch (error) {
             next(error)
         }
@@ -35,7 +35,7 @@ module.exports = {
             couponData = await couponModel.find({ _id: id }).lean();
             couponData[0].expiryDate = couponData[0].expiryDate.toISOString().substring(0, 10);
             couponData = couponData[0];
-            res.render('admin/editCoupon', { layout: 'admin-layout', couponData });
+            res.render('admin/editCoupon', { layout: 'admin-layout', couponData, adminPartials:true });
         } catch (error) {
             next(error)
         }

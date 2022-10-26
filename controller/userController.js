@@ -45,7 +45,7 @@ exports.SignupAction = async function (req, res, next) {
     try {
         let oldUser = await userModel.findOne({ email: req.body.email })
         if (oldUser) {
-            return res.send('old user found')
+            return res.render("user/signup", { msg: "User already exists!" });
         }
         let newUser = await userModel.create(req.body)
         // console.log(newUser)
@@ -101,20 +101,22 @@ exports.LoginAction = async function (req, res, next) {
 
 
         if (userData) {
-            if (userData.block == true) res.send("you are blocked by admin")
+            if (userData.block == true) {
+                return res.render("user/userLogin", { msg: "User blocked by admin" });
+            }
 
             else {
                 let correct = await bcrypt.compare(req.body.password, userData.password);
                 if (correct == true) {
                     req.session.userLogin = true;
-                    req.session.userId = userData._id
+                    req.session.userId = userData._id;
                     return res.redirect('/')
                 }
-                else res.send("password incorrect")
+                return res.render("user/userLogin", { msg: "Username or password incorrect!" });
             }
         }
         else {
-            res.send('no user found')
+            return res.render("user/userLogin", { msg: "No user Found!" });
         }
     } catch (error) {
         next(error)

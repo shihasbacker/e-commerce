@@ -87,6 +87,7 @@ router.get('/editCoupon/:id',couponRoutes.renderEditCoupon)
 router.post('/editCoupon/:id',couponRoutes.editCoupon);
 router.get('/deleteCoupon/:id',couponRoutes.deleteCoupon)
 
+router.get('/salesReport',sessionCheck.adminSessionChecker,adminRoutes.salesReport);
 // router.use((req,res,next) => {
 //     next(createError(404))
 //   })
@@ -98,7 +99,7 @@ router.get('/deleteCoupon/:id',couponRoutes.deleteCoupon)
 //   })
 
 
-  router.use((req,res,next) => {
+router.use((req,res,next) => {
     //next(createError(404))
     res.render("admin/error")
 })

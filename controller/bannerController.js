@@ -7,7 +7,7 @@ module.exports = {
     renderBanner: async (req, res, next) => {
         try {
             let bannerData = await bannerModel.find({}).populate('product').lean()
-            res.render('admin/tableBanner', { layout: 'admin-layout', bannerData })
+            res.render('admin/tableBanner', { layout: 'admin-layout', bannerData, adminPartials:true })
         } catch (error) {
             next(error)
         }
@@ -17,7 +17,7 @@ module.exports = {
             let bannerId = req.params.id;
             let bannerData = await bannerModel.findOne({ _id: bannerId }).populate('product').lean()
             let productData = await productModel.find().lean()
-            res.render('admin/editBanner', { layout: 'admin-layout', bannerData, productData });
+            res.render('admin/editBanner', { layout: 'admin-layout', bannerData, productData, adminPartials:true });
         } catch (error) {
             next(error)
         }
@@ -53,7 +53,7 @@ module.exports = {
     addBanner: async (req, res, next) => {
         try {
             let productData = await productModel.find().lean()
-            res.render('admin/addBanner', { layout: 'admin-layout', productData })
+            res.render('admin/addBanner', { layout: 'admin-layout', productData , adminPartials:true})
         } catch (error) {
             next(error)
         }

@@ -9,6 +9,7 @@ const orderModel = require('../model/orderSchema');
 const fs = require("fs");
 const path = require("path");
 const { findOne } = require("../model/addressSchema");
+const { ExportConfigurationInstance } = require("twilio/lib/rest/bulkexports/v1/exportConfiguration");
 
 let adminlayout = { layout: "admin-layout" };
 
@@ -26,10 +27,11 @@ exports.adminIndexRoute = async function (req, res, next) {
     let orderData = await orderModel.find().populate('products.productId').lean()
     const deliveredOrder = orderData.filter(e => e.status == 'delivered')
     const TotalRevenue = deliveredOrder.reduce((accr, crr) => accr + crr.grandTotal, 0)
-    const eachDaySale = await orderModel.aggregate([{ $match: { status: "delivered" } }, { $group: { _id: { day: { $dayOfMonth: "$createdAt" }, month: { $month: "$createdAt" }, year: { $year: "$createdAt" } }, total: { $sum: "$grandTotal" } } }]).sort({ _id: -1 })
+    const eachDaySale = await orderModel.aggregate([{ $match: { status: "delivered" } }, { $group: { _id: { day: { $dayOfMonth: "$createdAt" }, month: { $month: "$createdAt" }, year: { $year: "$createdAt" } }, total: { $sum: "$grandTotal" } } }]).sort({ _id: 1 })
     let today = new Date()
     res.render("admin/index", {
       admin: req.session.admin,
+      adminPartials: true,
       layout: "admin-layout", deliveredCount, shippedCount, cancelledCount, placedCount, TotalRevenue, eachDaySale
     });
   } catch (error) {
@@ -104,7 +106,7 @@ exports.adminLoginAction = async function (req, res, next) {
 exports.userDetails = async function (req, res, next) {
   try {
     let userData = await userModel.find().lean();
-    res.render("admin/userTable", { userData, layout: "admin-layout" });
+    res.render("admin/userTable", { userData, layout: "admin-layout", adminPartials:true });
   } catch (error) {
     next(error)
   }
@@ -114,7 +116,7 @@ exports.editBlock = async function (req, res, next) {
   try {
     let userId = req.params.id;
     let block = await userModel.find({ _id: userId }).lean();
-    res.render("admin/Blockform", { block, layout: "admin-layout" });
+    res.render("admin/Blockform", { block, layout: "admin-layout" , adminPartials:true});
   } catch (error) {
     next(error)
   }
@@ -151,14 +153,14 @@ exports.adminLogout = function (req, res, next) {
 exports.viewCategory = async function (req, res, next) {
   try {
     let categoryData = await categoryModel.find().lean();
-    res.render("admin/viewCategory", { categoryData, layout: "admin-layout" });
+    res.render("admin/viewCategory", { categoryData, layout: "admin-layout",adminPartials:true });
   } catch (error) {
     next(error)
   }
 };
 exports.addCategory = function (req, res, next) {
   try {
-    res.render("admin/addCategory", adminlayout);
+    res.render("admin/addCategory", {layout:'admin-layout',adminPartials:true});
   } catch (error) {
     next(error)
   }
@@ -211,7 +213,7 @@ exports.deleteCategory = async function (req, res, next) {
 exports.productDetails = async (req, res, next) => {
   try {
     let productData = await productModel.find().populate('category').lean();
-    res.render("admin/viewProducts", { productData, layout: "admin-layout" });
+    res.render("admin/viewProducts", { productData, layout: "admin-layout",adminPartials:true });
   } catch (error) {
     next(error)
   }
@@ -219,7 +221,7 @@ exports.productDetails = async (req, res, next) => {
 exports.addProduct = async function (req, res, next) {
   try {
     const categoryData = await categoryModel.find().lean();
-    res.render("admin/addProduct", { categoryData, layout: "admin-layout" });
+    res.render("admin/addProduct", { categoryData, layout: "admin-layout",adminPartials:true });
   } catch (error) {
     next(error)
   }
@@ -319,4 +321,8 @@ exports.editStatusButton = async (req, res, next) => {
     next(error)
   }
 }
-
+exports.salesReport = async (req,res)=>{
+    let data =await orderModel.find({status:"delivered"}).populate('products.productId').lean()
+   // console.log(data,"1111")
+    res.render('admin/salesReport',{data,layout:false})
+}

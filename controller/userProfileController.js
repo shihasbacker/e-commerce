@@ -18,7 +18,7 @@ module.exports = {
     changeUsername: async (req, res, next) => {
         try {
             userId = req.session.userId
-            await userModel.findOneAndUpdate({ userId: userId }, { $set: { 'name': req.body.name } })
+            await userModel.findOneAndUpdate({ _id: userId }, { $set: { 'name': req.body.name } })
             res.json({})
         } catch (error) {
             next(error)

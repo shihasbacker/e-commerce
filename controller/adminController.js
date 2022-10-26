@@ -324,5 +324,5 @@ exports.editStatusButton = async (req, res, next) => {
 exports.salesReport = async (req,res)=>{
     let data =await orderModel.find({status:"delivered"}).populate('products.productId').lean()
    // console.log(data,"1111")
-    res.render('admin/salesReport',{data,layout:false})
+    res.render('admin/SalesReport',{data,layout:false})
 }

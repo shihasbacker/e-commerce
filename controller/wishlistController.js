@@ -10,7 +10,7 @@ module.exports = {
                 { userId: userId }
             ).populate("products.productId").lean()
 
-            res.render('user/wishlist', { wishlistDatas })
+            res.render('user/wishlist', { wishlistDatas , userPartials:true})
         } catch (error) {
             next(error)
         }

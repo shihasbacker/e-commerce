@@ -60,34 +60,34 @@ router.post('/editCategory/:id',sessionCheck.adminSessionChecker,adminRoutes.edi
 router.get('/deleteCategory/:id',sessionCheck.adminSessionChecker, adminRoutes.deleteCategory);
 
 //product//
-router.get('/viewProducts',adminRoutes.productDetails)
-router.get('/addProduct',adminRoutes.addProduct)
+router.get('/viewProducts',sessionCheck.adminSessionChecker,adminRoutes.productDetails)
+router.get('/addProduct',sessionCheck.adminSessionChecker,adminRoutes.addProduct)
 router.post('/addProduct',upload.array('photos', 4),adminRoutes.createProduct)
-router.get('/viewEditProduct/:id',adminRoutes.viewEditProduct)
+router.get('/viewEditProduct/:id',sessionCheck.adminSessionChecker,adminRoutes.viewEditProduct)
 router.post('/editProduct/:id',upload.array('photos', 4),adminRoutes.editProduct)
-router.get('/deleteProduct/:id',adminRoutes.deleteProduct)
+router.get('/deleteProduct/:id',sessionCheck.adminSessionChecker,adminRoutes.deleteProduct)
 
-router.get('/orders',adminRoutes.orders)
-router.get('/editStatus/:id',adminRoutes.editStatus)
+router.get('/orders',sessionCheck.adminSessionChecker,adminRoutes.orders)
+router.get('/editStatus/:id',sessionCheck.adminSessionChecker,adminRoutes.editStatus)
 router.post('/editStatusButton/:id',adminRoutes.editStatusButton);
 
 //banner//
-router.get('/tableBanner',bannerRoutes.renderBanner)
-router.get('/viewEditBanner/:id',bannerRoutes.renderEditBanner);
+router.get('/tableBanner',sessionCheck.adminSessionChecker,bannerRoutes.renderBanner)
+router.get('/viewEditBanner/:id',sessionCheck.adminSessionChecker,bannerRoutes.renderEditBanner);
 router.post('/editBanner/:id',uploads.single('image'),bannerRoutes.editBanner);
-router.get('/addBanner',bannerRoutes.addBanner)
+router.get('/addBanner',sessionCheck.adminSessionChecker,bannerRoutes.addBanner)
 router.post('/addBanner',uploads.single('image'),bannerRoutes.addBannerButton)
-router.get('/deleteBanner/:id',bannerRoutes.deleteBanner)
+router.get('/deleteBanner/:id',sessionCheck.adminSessionChecker,bannerRoutes.deleteBanner)
 
 //coupon//
-router.get('/viewCoupon',couponRoutes.couponTable)
-router.get('/addCoupon',couponRoutes.renderAddCoupon)
+router.get('/viewCoupon',sessionCheck.adminSessionChecker,couponRoutes.couponTable)
+router.get('/addCoupon',sessionCheck.adminSessionChecker,couponRoutes.renderAddCoupon)
 router.post('/addCoupon',couponRoutes.addCoupon)
-router.get('/editCoupon/:id',couponRoutes.renderEditCoupon)
+router.get('/editCoupon/:id',sessionCheck.adminSessionChecker,couponRoutes.renderEditCoupon)
 router.post('/editCoupon/:id',couponRoutes.editCoupon);
-router.get('/deleteCoupon/:id',couponRoutes.deleteCoupon)
+router.get('/deleteCoupon/:id',sessionCheck.adminSessionChecker,couponRoutes.deleteCoupon)
 
-router.get('/salesReport',sessionCheck.adminSessionChecker,adminRoutes.salesReport);
+router.get('/salesReport',sessionCheck.adminSessionChecker,sessionCheck.adminSessionChecker,adminRoutes.salesReport);
 // router.use((req,res,next) => {
 //     next(createError(404))
 //   })
